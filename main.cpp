@@ -81,42 +81,96 @@ public:
     }
 };
 
-void shop(Character& player) {
-    while (true) {
-        cout << "상점에 오신 것을 환영합니다! 현재 골드: " << player.gold << "\n";
-        cout << "1. 물약 (50 골드) - 체력 회복\n";
-        cout << "2. " << player.name << " 전용 무기 (100 골드) - 공격력 증가\n";
-        cout << "3. 나가기\n";
-        int choice;
-        cin >> choice;
+class Equipment {
+public:
+    string name;
+    int healthBoost, mpBoost, attackBoost, defenseBoost;
+    
+    Equipment(string n, int h, int mp, int a, int d) : name(n), healthBoost(h), mpBoost(mp), attackBoost(a), defenseBoost(d) {}
+};
 
-        switch (choice) {
-            case 1:
-                if (player.gold >= 50) {
-                    player.gold -= 50;
-                    player.health = player.maxHealth;
-                    cout << "체력이 회복되었습니다!\n";
-                } else {
-                    cout << "골드가 부족합니다.\n";
-                }
-                break;
-            case 2:
-                if (player.gold >= 100) {
-                    player.gold -= 100;
-                    player.maxAttack += 10;
-                    player.minAttack = int(player.maxAttack * 0.7);
-                    cout << "무기를 구입하여 공격력이 증가했습니다!\n";
-                } else {
-                    cout << "골드가 부족합니다.\n";
-                }
-                break;
-            case 3:
-                return;
-            default:
-                cout << "잘못된 선택입니다.\n";
-                break;
+void equipItem(Character& player, Equipment& item) {
+    
+    player.health += item.healthBoost;
+    player.maxHealth += item.healthBoost;
+    
+    player.mp += item.mpBoost;
+    player.maxMp += item.mpBoost;
+    
+    player.minAttack += item.attackBoost;
+    player.maxAttack += item.attackBoost;
+    
+    player.defense += item.defenseBoost;
+    
+    player.weapon = item.name;
+    
+    cout << item.name << "을(를) 장착했습니다.\n";
+}
+
+void shop(Character& player) {
+    Equipment Warrior_Sword("전용 검", 100, 40, 20, 10);
+    Equipment Archer_Bow("전용 활", 70, 70, 30, 7);
+    Equipment Mage_Staff("전용 스태프", 50, 90, 40, 5);
+    
+    while (true) {
+            cout << "상점에 오신 것을 환영합니다! 현재 골드: " << player.gold << "\n";
+            cout << "1. 물약 (50 골드) - 회복\n";
+            cout << "2. ";
+            if(player.name == "전사") cout << "헬스";
+            else if (player.name == "궁수") cout << "과녁 맞히기";
+            else cout << "명상";
+            
+            cout << "(80 골드) - 공격력 증가\n";
+            cout << "3. 전용 무기 구매 (200 골드)\n";
+            cout << "4. 나가기\n";
+            int choice;
+            cin >> choice;
+
+            switch (choice) {
+                case 1:
+                    if (player.gold >= 50) {
+                        player.gold -= 50;
+                        
+                        player.health = player.maxHealth;
+                        player.mp = player.maxMp;
+                        
+                        cout << "체력과 마나가 모두 회복되었습니다!\n";
+                    } else {
+                        cout << "골드가 부족합니다.\n";
+                    }
+                    break;
+                case 2:
+                    if (player.gold >= 80) {
+                        player.gold -= 80;
+                        player.maxAttack += 10;
+                        player.minAttack = int(player.maxAttack * 0.7);
+                        cout << "공격력이 증가했습니다!\n";
+                    } else {
+                        cout << "골드가 부족합니다.\n";
+                    }
+                    break;
+                case 3:
+                    if (player.gold >= 200) {
+                        player.gold -= 200;
+                        
+                        if (player.name == "전사") equipItem(player, Warrior_Sword);
+                        else if(player.name == "궁수") equipItem(player, Archer_Bow);
+                        else if (player.name == "마법사") equipItem(player, Mage_Staff);
+                        
+                        cout << "전용 무기를 획득했습니다!";
+                    } else {
+                        cout << "골드가 부족합니다.\n";
+                    }
+                    break;
+                    
+                case 4:
+                    return;
+                    
+                default:
+                    cout << "잘못된 선택입니다.\n";
+                    break;
+            }
         }
-    }
 }
 
  
@@ -240,6 +294,8 @@ int main() {
 }
 
  
+
+
 
 
 

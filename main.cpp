@@ -22,9 +22,14 @@ using namespace std;
         } else {
             cout << name << "의 공격이 무효화되었습니다.\n";
         }
+        displayStatus();
     }
      
      Character(string n, int h, int ma, int d, int g) : name(n), maxHealth(h), health(h), maxAttack(ma), minAttack(int(ma * 0.7)), defense(d), gold(g), weapon("기본 무기") {}
+     
+     void displayStatus() {
+         cout << name << "의현재 상태 - Health: " << health << "/" << maxHealth << "\n";
+     }
 
  };
 
@@ -158,6 +163,8 @@ void battle(Character& player) {
  }
 
  
+
+
 
 
 

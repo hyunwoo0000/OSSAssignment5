@@ -73,26 +73,27 @@ void shop(Character& player) {
 
  
 
-void battle(Character& player) {
-    for (int i = 1; i <= 10; i++) {
-        Character enemy("적 " + to_string(i), 50 + i * 10, 10 + i * 5, 5 + i * 2, 20 + i * 10);
-        if (i == 10) enemy.name = "보스";
+void battle(Character& player, int stage) {
+    
+    int i = stage;
+    Character enemy("적 " + to_string(i), 50 + i * 10, 10 + i * 5, 5 + i * 2, 20 + i * 10);
+    if (i == 10) enemy.name = "보스";
 
-        cout << enemy.name << "가 등장했습니다!\n";
+    cout << enemy.name << "가 등장했습니다!\n";
 
-        while (player.health > 0 && enemy.health > 0) {
-            player.attackTarget(enemy);
-            if (enemy.health > 0) enemy.attackTarget(player);
-        }
-
-        if (player.health <= 0) {
-            cout << player.name << "가 쓰러졌습니다. 게임 오버!\n";
-            return;
-        } else {
-            player.gold += enemy.gold;
-            cout << enemy.name << "를 무찌르셨습니다!\n";
-        }
+    while (player.health > 0 && enemy.health > 0) {
+        player.attackTarget(enemy);
+        if (enemy.health > 0) enemy.attackTarget(player);
     }
+
+    if (player.health <= 0) {
+        cout << player.name << "가 쓰러졌습니다. 게임 오버!\n";
+        return;
+    } else {
+        player.gold += enemy.gold;
+        cout << enemy.name << "를 무찌르셨습니다!\n";
+    }
+    
     cout << "모든 적을 무찌르고 게임에서 승리했습니다!\n";
 }
 
@@ -126,6 +127,7 @@ void battle(Character& player) {
              cout << "잘못된 선택입니다.\n";
              return 1;
      }
+     int stage = 1;
      
      while (player->health > 0) {
         cout << "무엇을 하시겠습니까?\n";
@@ -137,7 +139,7 @@ void battle(Character& player) {
                 shop(*player);
                 break;
             case 2:
-                battle(*player);
+                battle(*player, stage++);
                 break;
             case 3:
                 cout << "직업: " << player->name
@@ -156,6 +158,7 @@ void battle(Character& player) {
                 cout << "잘못된 선택입니다.\n";
                 break;
         }
+        if (stage > 10) break;
     }
      
 
